@@ -32,6 +32,10 @@ second_names = nd.get_top_names(
     country_alpha2=country
 )[country]
 
+@app.route("/")
+def index():
+    return "Hello, World!"
+
 @app.route("/api/random_name/<string:gender>", methods=['GET'])
 def get_random_name(gender):
     # Convert the gender to lower case
