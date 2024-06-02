@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from flask import Flask, jsonify, abort
 from names_dataset import NameDataset
 import random
 
-app = FastAPI()
+app = Flask(__name__)
 
 nd = NameDataset()
 
@@ -32,9 +32,9 @@ second_names = nd.get_top_names(
     country_alpha2=country
 )[country]
 
-@app.get("/api/random_name/")
-@app.get("/api/random_name/{gender}")
-def get_random_name(gender = "male"):
+@app.route("/api/random_name/", defaults={'gender': 'male'}, methods=['GET'])
+@app.route("/api/random_name/<string:gender>", methods=['GET'])
+def get_random_name(gender):
     # Convert the gender to lower case
     gender = gender.lower()
 
@@ -57,3 +57,6 @@ def get_random_name(gender = "male"):
         "first_name": first_name,
         "second_name": second_name
     }
+
+if __name__ == "__main__":
+    app.run(debug=True)
