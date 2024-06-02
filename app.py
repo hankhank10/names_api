@@ -32,17 +32,17 @@ second_names = nd.get_top_names(
     country_alpha2=country
 )[country]
 
-@app.route("/api/random_name/", defaults={'gender': 'male'}, methods=['GET'])
 @app.route("/api/random_name/<string:gender>", methods=['GET'])
 def get_random_name(gender):
     # Convert the gender to lower case
     gender = gender.lower()
 
     if gender not in valid_genders:
-        raise HTTPException(
-            status_code=400,
-            detail=f"{gender} is not in list of valid genders. Valid options are {valid_genders}."
-        )
+        return {
+            "status": "error",
+            "message": "Invalid gender provided",
+            "valid_options": valid_genders
+        }, 400
 
     if gender == "male":
         first_name = random.choice (first_names_male)
